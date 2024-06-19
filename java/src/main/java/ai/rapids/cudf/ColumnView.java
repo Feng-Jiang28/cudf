@@ -2863,6 +2863,18 @@ public class ColumnView implements AutoCloseable, BinaryOperable {
   }
 
   /**
+   * Returns a new string column that contains a substring from a given column based on delimiter and
+   * count.
+   * @param delimiter string delimiter
+   * @param count number of occurrence
+   * @return A new java coumn vector containing the substring
+   */
+  public final ColumnVector substringIndex(String delimiter, int count){
+    assert type.equals(DType.STRING) : "column type must be a String";
+    return new ColumnVector(substringIndex(getNativeView(), delimiter, count));
+  }
+
+  /**
    * Given a lists column of strings (each row is a list of strings), concatenates the strings
    * within each row and returns a single strings column result. Each new string is created by
    * concatenating the strings from the same row (same list element) delimited by the separator
@@ -4339,6 +4351,16 @@ public class ColumnView implements AutoCloseable, BinaryOperable {
    */
   private static native long substringColumn(long columnView, long startColumn, long endColumn)
       throws CudfException;
+
+  /**
+   * Native method to get a substring from a given string column before count occurrences of the delimiter delim.
+   * If count is positive, everything the left of the final delimiter is returned. If count is negative, everything
+   * to the right of the final delimiter is returned. (case-sensitive match for delim)
+   * @param columnView
+   * @param Delimiter
+   * @param cont
+   */
+  private static native long substringIndex(long columnView, String Delimiter, int cont) throws CudfException;
 
   /**
    * Native method to replace target string by repl string.

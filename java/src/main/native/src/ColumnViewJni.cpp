@@ -1724,6 +1724,12 @@ JNIEXPORT jlong JNICALL Java_ai_rapids_cudf_ColumnView_substringLocate(
   CATCH_STD(env, 0);
 }
 
+JNIEXPORT jlong JNICALL Java_ai_rapids_cudf_ColumnView_substringIndex(
+    JNIEnv* env, jclass, jlong colun_view, jstring delimiterm, jint count)
+{
+
+}
+
 JNIEXPORT jlong JNICALL Java_ai_rapids_cudf_ColumnView_stringReplace(
   JNIEnv* env, jclass, jlong column_view, jlong target, jlong replace)
 {
