@@ -4264,6 +4264,12 @@ public class ColumnView implements AutoCloseable, BinaryOperable {
    */
   private static native long substringLocate(long columnView, long substringScalar, int start, int end);
 
+  /**
+   * Native method for locating multiple starting indexes of the instances of a given substring in
+   * each string in the column.
+   * @param columnView native handle of the cudf::column_view containing strings being operated on.
+   * @param substringScalar string scalar handle containing the string to locate within each row.
+   */
   private static native long substringLocateMultiple(long columnView, long substringScalar);
 
   /**
