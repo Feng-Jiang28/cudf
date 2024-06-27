@@ -2623,6 +2623,14 @@ public class ColumnView implements AutoCloseable, BinaryOperable {
   }
 
   /**
+   * Locates the all the instances of the given string in each row of a column.
+   * @param substring scalar containing the string scalar to locate within each row
+   */
+  public final ColumnVector stringLocateMultiple(Scalar substring){
+    return new ColumnVector(ColumnView.substringLocateMultiple(getNativeView(), substring.getScalarHandle()));
+  }
+
+  /**
    * Returns a list of columns by splitting each string using the specified pattern. The number of
    * rows in the output columns will be the same as the input column. Null entries are added for a
    * row where split results have been exhausted. Null input entries result in all nulls in the
@@ -2860,18 +2868,6 @@ public class ColumnView implements AutoCloseable, BinaryOperable {
     assert (start.getType().equals(DType.INT32) && end.getType().equals(DType.INT32)) : "start and end " +
         "vectors must be of integer type";
     return new ColumnVector(substringColumn(getNativeView(), start.getNativeView(), end.getNativeView()));
-  }
-
-  /**
-   * Returns a new string column that contains a substring from a given column based on delimiter and
-   * count.
-   * @param delimiter string delimiter
-   * @param count number of occurrence
-   * @return A new java coumn vector containing the substring
-   */
-  public final ColumnVector substringIndex(String delimiter, int count){
-    assert type.equals(DType.STRING) : "column type must be a String";
-    return new ColumnVector(substringIndex(getNativeView(), delimiter, count));
   }
 
   /**
@@ -4268,6 +4264,8 @@ public class ColumnView implements AutoCloseable, BinaryOperable {
    */
   private static native long substringLocate(long columnView, long substringScalar, int start, int end);
 
+  private static native long substringLocateMultiple(long columnView, long substringScalar);
+
   /**
    * Returns a list of columns by splitting each string using the specified string literal
    * delimiter. The number of rows in the output columns will be the same as the input column.
@@ -4351,16 +4349,6 @@ public class ColumnView implements AutoCloseable, BinaryOperable {
    */
   private static native long substringColumn(long columnView, long startColumn, long endColumn)
       throws CudfException;
-
-  /**
-   * Native method to get a substring from a given string column before count occurrences of the delimiter delim.
-   * If count is positive, everything the left of the final delimiter is returned. If count is negative, everything
-   * to the right of the final delimiter is returned. (case-sensitive match for delim)
-   * @param columnView
-   * @param Delimiter
-   * @param cont
-   */
-  private static native long substringIndex(long columnView, String Delimiter, int cont) throws CudfException;
 
   /**
    * Native method to replace target string by repl string.
